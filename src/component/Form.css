@@ -1,0 +1,29 @@
+.form-wrap {
+    display: flex;
+    justify-content: center;
+  }
+
+.form {
+  height: 20em;
+  width: 30em;
+  padding: 3em 0;
+  box-sizing: border-box;
+  box-shadow: 0 0 10px #ccc;
+  border-radius: 10px;
+  margin-top: 20em;
+}
+
+.form__btn-wrap {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  margin-top: 2em;
+}
+
+.form__btn-wrap__btn {
+  height: 3em;
+  width: 90%;
+  border: none;
+  color: #fff;
+  background-color: #6f96e9;
+}

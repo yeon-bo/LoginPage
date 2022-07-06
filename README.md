@@ -85,6 +85,17 @@ export const isLoggedIn = atom({
   };
 ```
 
+### useEffect
+local storage에 저장된 로그인 데이터가 true라면 메인 페이지로 바로 이동
+```javascript
+const Main = () => {
+useEffect(() => {
+    if (setIsLoggedIn) {
+      navigate("/main", { replace: true });
+    }
+  }, []);
+```
+
 ### logout
 메인 페이지에서 로그아웃 버튼으로 local storage의 값 변경 -> 로그인 페이지로 이동
 ```javascript

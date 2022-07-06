@@ -1,70 +1,103 @@
-# Getting Started with Create React App
+# 아이언 플래그 사전 과제
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+## 요구 조건
+- 로그인 페이지 컴포넌트 개발
+- 최소 input 2개와 button 1개 사용
+- 로그인시 Local Storage 로그인 정보 저장, 메인 페이지로 이동
+- README.md 작성
 
-## Available Scripts
+## 사용 스펙
+- react
+- react-router-dom
+- recoil
 
-In the project directory, you can run:
+## 컴포넌트
+- Form (login page)
+- Main (main page)
 
-### `npm start`
+## 코드 설명
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
+### router
+Outlet 사용으로 주소로 통한 접근 차단
+```javascript
+const PrivateRoute = () => {
+  const isLogged = useRecoilValue(isLoggedIn);
+  return isLogged ? <Outlet /> : <Navigate to="/" />;
+};
 
-The page will reload when you make changes.\
-You may also see any lint errors in the console.
+<Routes>
+ <Route path="/" element={<Form />} />
+   <Route exact path="/main" element={<PrivateRoute />}>
+   <Route path="/main" element={<Main />} />
+ </Route>
+</Routes>
+```
 
-### `npm test`
+### auth.js
+id와 pw 데이터를 만드는 과정에서 보안문제로 auth.js로 분리
+```javascript
+export function signIn({ userId, userPw }) {
+  const user = users.some(
+    (user) => user.id === userId && user.pw === userPw
+  );
+  if (!user) throw new Error("정보가 일치하지 않습니다.");
+}
+```
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+### recoil
+local storage를 확인하기 위한 상태 관리 라이브러리 recoil atom 사용
+```javascript
+const localStorageEffect =
+  (key) =>
+  ({ setSelf, onSet }) => {
+    const savedValue = localStorage.getItem(key);
+    if (savedValue !== null) {
+      setSelf(JSON.parse(savedValue));
+    }
 
-### `npm run build`
+    onSet((newValue, _, isReset) => {
+      isReset
+        ? localStorage.removeItem(key)
+        : localStorage.setItem(key, JSON.stringify(newValue));
+      });
+  };
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+export const isLoggedIn = atom({
+  key: "isLoggedIn",
+  default: false,
+  effects: [localStorageEffect("isLoggedIn")],
+});
+```
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+### catch
+아이디가 틀릴 시 catch로 예외 발생처리
+```javascript
+  const submitHandler = () => {
+    try {
+      signIn({ userId, userPw });
+      setIsLoggedIn((value) => true);
+      navigate("/main", { replace: true });
+    } catch (e) {
+      alert("Failed to login");
+      setUserId("");
+      setUserPw("");
+    }
+  };
+```
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+### logout
+메인 페이지에서 로그아웃 버튼으로 local storage의 값 변경 -> 로그인 페이지로 이동
+```javascript
+const Main = () => {
+  const navigate = useNavigate();
+  const setIsLoggedIn = useSetRecoilState(isLoggedIn);
 
-### `npm run eject`
-
-**Note: this is a one-way operation. Once you `eject`, you can't go back!**
-
-If you aren't satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
-
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you're on your own.
-
-You don't have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn't feel obligated to use this feature. However we understand that this tool wouldn't be useful if you couldn't customize it when you are ready for it.
-
-## Learn More
-
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
-
-To learn React, check out the [React documentation](https://reactjs.org/).
-
-### Code Splitting
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
-
-### Analyzing the Bundle Size
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
-
-### Making a Progressive Web App
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
-
-### Advanced Configuration
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
-
-### Deployment
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
-
-### `npm run build` fails to minify
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
+  const submitHandler = () => {
+    try {
+      setIsLoggedIn((value) => !value);
+      navigate("/", { replace: true });
+    } catch (e) {
+      alert("Failed to logout");
+    }
+  };
+```

@@ -1,21 +1,21 @@
-import React, { useEffect } from "react";
+import React from "react"; // , { useEffect }
 import { Routes, Route } from "react-router-dom";
 import PrivateRoute from "./utils/PrivateRoute";
-import { useSetRecoilState } from "recoil";
-import { isLoggedIn } from "./utils/atoms";
-import { useNavigate } from "react-router-dom";
-import Form from './pages/Form';
-import Main from './pages/Main';
+// import { useSetRecoilState } from "recoil";
+// import { isLoggedIn } from "./utils/atoms";
+// import { useNavigate } from "react-router-dom";
+import Form from "./pages/Form";
+import Main from "./pages/Main";
 
 function App() {
-  const navigate = useNavigate();
-  const setIsLoggedIn = useSetRecoilState(isLoggedIn);
+  // const navigate = useNavigate();
+  // const setIsLoggedIn = useSetRecoilState(isLoggedIn);
 
-  useEffect(() => {
-    if (setIsLoggedIn) {
-      navigate("/main", { replace: true });
-    }
-  }, []);
+  // useEffect(() => {
+  //   if (setIsLoggedIn) {
+  //     navigate("/main", { replace: true });
+  //   }
+  // }, []);
 
   return (
     <div className="App">

@@ -1,4 +1,4 @@
-const users = [{ id: "ifg", pw: "1234" }];
+const users = [{ id: "user", pw: "1234" }];
 
 export function signIn({ userId, userPw }) {
   const user = users.some(

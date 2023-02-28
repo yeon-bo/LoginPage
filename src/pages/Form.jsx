@@ -1,40 +1,41 @@
 import React, { useState } from "react";
-import { useNavigate } from "react-router-dom";
-import { useSetRecoilState } from "recoil";
-import { isLoggedIn } from "../utils/atoms";
-import { signIn } from "../utils/auth";
+// import { useNavigate } from "react-router-dom";
+// import { useSetRecoilState } from "recoil";
+// import { isLoggedIn } from "../utils/atoms";
+// import { signIn } from "../utils/auth";
 import "./Form.css";
 
 const Form = () => {
   const [userId, setUserId] = useState("");
   const [userPw, setUserPw] = useState("");
-  const navigate = useNavigate();
-  const setIsLoggedIn = useSetRecoilState(isLoggedIn);
+  // const navigate = useNavigate();
+  // const setIsLoggedIn = useSetRecoilState(isLoggedIn);
 
-  const submitHandler = () => {
-    try {
-      signIn({ userId, userPw });
-      setIsLoggedIn((value) => true);
-      navigate("/main", { replace: true });
-    } catch (e) {
-      alert("Failed to login");
-      setUserId("");
-      setUserPw("");
-    }
-  };
+  // const submitHandler = () => {
+  //   try {
+  //     signIn({ userId, userPw });
+  //     setIsLoggedIn((value) => true);
+  //     navigate("/main", { replace: true });
+  //   } catch (e) {
+  //     alert("Failed to login");
+  //     setUserId("");
+  //     setUserPw("");
+  //   }
+  // };
 
   return (
     <>
       <section className="form-wrap">
         <form id="form" className="form">
           <div className="form__input">
-            <label htmlFor="id" className="form__input_label">
+            {/* <label htmlFor="id" className="form__input_label">
               ID
-            </label>
+            </label> */}
             <input
               type="text"
               id="id"
-              placeholder="ifg를 입력해주세요."
+              placeholder="NB 005.57-ㅇ832ㄷ"
+              disabled
               className="form__input__input"
               value={userId}
               onChange={({ target: { value } }) => {
@@ -43,13 +44,14 @@ const Form = () => {
             />
           </div>
           <div className="form__input">
-            <label htmlFor="id" className="form__input_label">
+            {/* <label htmlFor="id" className="form__input_label">
               PW
-            </label>
+            </label> */}
             <input
               type="password"
               id="pw"
-              placeholder="1234를 입력해주세요."
+              placeholder="NB 818-ㄱ216ㄷ"
+              disabled
               className="form__input__input"
               value={userPw}
               onChange={({ target: { value } }) => {
@@ -58,13 +60,13 @@ const Form = () => {
             />
           </div>
           <div className="form__btn-wrap">
-            <button
+            {/* <button
               type="submit"
               className="form__btn-wrap__btn"
               onClick={submitHandler}
             >
               login
-            </button>
+            </button> */}
           </div>
         </form>
       </section>
